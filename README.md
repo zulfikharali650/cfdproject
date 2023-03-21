@@ -1,1 +1,1 @@
-# Computational Fluid Dyanics Project
+# Computational Fluid Dynamics Project
