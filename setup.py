@@ -16,7 +16,7 @@ def get_requirements(file_path:str)->List[str]:
     return requirements
 
 setup(
-    name='CFD Project using GPT-2',
+    name='CFD Project using GPT-2 For Erosion Prediction',
     version='0.0.1',
     author='Zulfi Ali',
     author_email='zulfikharali650@gmail.com',

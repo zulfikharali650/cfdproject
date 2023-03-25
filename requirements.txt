@@ -1,10 +1,16 @@
 pandas
 numpy
+h5py
+torch
+logging
+sklearn
+typing
+math
+random
+gc
 seaborn
 matplotlib
-pytorch
-sklearn
-dill
-Flask
+dill 
+
 
 #-e .
