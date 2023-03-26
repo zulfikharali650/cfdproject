@@ -1244,11 +1244,6 @@ class EarlyStopping:
         if self.counter == config["training"]["es_counter"]:
             self.early_stop = True
             self.save_checkpoint(val_loss, model, epoch)
-# =============================================================================
-#         else:
-#             if self.verbose:
-#                 logger.info('Early Stopping not activated at epoch {}'.format(epoch))
-# =============================================================================
                 
     def save_checkpoint(self, val_loss, model, epoch):
         '''Saves model when validation loss decrease.'''
@@ -1259,8 +1254,6 @@ class EarlyStopping:
     
 optimizer = torch.optim.Adam(model.parameters(), lr=config["training"]["learning_rate"])
 scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=config["training"]["learning_rate"], max_lr=config["training"]["max_lr"],step_size_up=5,mode="exp_range",gamma=0.85, cycle_momentum=False)
-#scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optimizer, config["training"]["T_0_for_cosine_annealing"], config["training"]["T_mult_for_cosine_annealing"],  eta_min=1e-9)
-#scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=config["training"]["scheduler_step_size"], gamma=0.9)
 early_stopping = EarlyStopping(mse_threshold=config["training"]["MSE_threshold"], verbose=True, path=config["model"]["path"] + "/model/TransformerGPT.pt")
 
 # =============================================================================
