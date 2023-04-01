@@ -3,13 +3,40 @@ import sys
 import h5py
 import numpy as np
 import torch
-import logging
+# import logging
 import random
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 from torch.utils.data.dataset import Dataset
 import torch.nn as nn
 from typing import Any, Tuple, Dict, List, Union
 import math
+
+from src.exception import CustomException
+from src.logger import logging
+
+@dataclass
+class DataIngestionConfig:
+    train_data_path=os.path.join('artifacts', 'train.csv')
+    test_data_path=os.path.join('artifacts', 'test.csv')
+    raw_data_path=os.path.join('artifacts', 'data.csv')
+
+class DataIngestion:
+    def __init__(self) -> None:
+        self.config_path = DataIngestionConfig()
+        
+    def initiate_data_ingestion(self):
+        logging.info("Entered the data ingestion component")
+        try:
+            pass
+        except Exception as e:
+            raise CustomException(e, sys)
+
+
+
+if __name__=="__main__":
+    obj = DataIngestion()
+    train_data, test_data = obj.initiate_data_ingestion()
+
 
 
 Tensor = torch.Tensor
