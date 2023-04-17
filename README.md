@@ -1,7 +1,11 @@
 # Computational Fluid Dynamics Project
 
-Project worked on with Steve D. Yang
+# Project Overview
 
-The data used were calculated using the Ansys Fluent software for the fluid dyanmics erosion calculations on a Steam boiler header.
+This project aims to develop and implement a hybrid machine-learning approach to predict particle trajectory and erosion distribution in an industrial-scale boiler header using GPT-2 and 3D CNN. The particle trajectories based on five initial parameters (i.e., particle size, main-inlet speed, main-inlet pressure, sub-inlet speed, and sub-inlet pressure) were predicted using GPT-2, followed by an erosion prediction based on the predicted trajectories from GPT-2. The GPT-2 hyperparameters were optimized for the best training efficiency and prediction performance. An initial parameter ranking system is implemented on the model's erosion predictions, suggesting the best initial parameters to minimize erosion. At the time of writing, this work is the first to implement GPT-2 in a hybrid method for erosion predictions in an industrial-scale boiler header.  
+
+This project was collaborative research with Steve D. Yang.
+
+The data was generated using the Ansys Fluent software for the fluid dynamics erosion calculations on a Steam boiler header.
 
 
