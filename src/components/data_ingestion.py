@@ -187,7 +187,7 @@ class DatasetReader(Dataset):
         self.states = []
         with h5py.File(file_path, "r") as f:
             self.load_data(f, **kwargs)  
-   
+
     def load_data(self, h5_file: h5py.File) -> None:
 
         # Iterate through stored time-series
@@ -203,13 +203,13 @@ class DatasetReader(Dataset):
                 p=p.to(config["training"]["device"])
                 data_series1 = torch.cat([data_series, p.unsqueeze(-1) * torch.ones_like(data_series[:,:1])], dim=1)
                 data_series1 = data_series1.view(data_series1.size(0),data_series1.size(1)*data_series1.size(2))
-                       
+    
                 # Stride over time-series
                 for i in range(0, data_series1.size(0) - self.block_size + 1, self.stride):
                     
                     data_series0 = data_series1[i: i + self.block_size]  # .repeat(1, 4)
                     self.examples.append(data_series0)
-     
+    
                     if self.eval:
                         self.states.append(data_series[i: i+ self.block_size].cpu())
         
@@ -258,19 +258,19 @@ class DataCollator:
             return
 
 training_data = DatasetReader(
-      config["training"]["training_h5_file"], 
-      block_size=config["training"]["n_ctx"], 
-      stride=config["training"]["stride"],
-      ndata=config["training"]["ndata"], 
-      )
+    config["training"]["training_h5_file"], 
+    block_size=config["training"]["n_ctx"], 
+    stride=config["training"]["stride"],
+    ndata=config["training"]["ndata"], 
+    )
 
 validating_data = DatasetReader(
-      config["validating"]["validating_h5_file"], 
-      block_size=config["validating"]["block_size"], 
-      stride=config["validating"]["stride"],
-      ndata=config["validating"]["ndata"], 
-      eval = True,
-      )
+    config["validating"]["validating_h5_file"], 
+    block_size=config["validating"]["block_size"], 
+    stride=config["validating"]["stride"],
+    ndata=config["validating"]["ndata"], 
+    eval = True,
+    )
 
 training_loader = DataLoader(
     training_data,
@@ -284,6 +284,25 @@ validating_loader = DataLoader(
     validating_data,
     batch_size=config["validating"]["batch_size"],
     sampler=SequentialSampler(validating_data),
+    collate_fn=DataCollator(),
+    drop_last=True,
+)
+
+
+#Testing
+
+testing_data = DatasetReader(
+    config["testing"]["testing_h5_file"], 
+    block_size=config["testing"]["block_size"], 
+    stride=config["testing"]["stride"],
+    ndata=config["testing"]["ndata"], 
+    eval = True,
+    )
+
+testing_loader = DataLoader(
+    testing_data,
+    batch_size=config["testing"]["batch_size"],
+    sampler=SequentialSampler(testing_data),
     collate_fn=DataCollator(),
     drop_last=True,
 )
