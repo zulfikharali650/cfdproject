@@ -16,6 +16,8 @@ from typing import Any, Tuple, Dict, List, Union
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 from torch.utils.data.dataset import Dataset
 import torch.nn as nn
+from torchmetrics import MeanSquaredError #as mean_squared_error
+from torchmetrics import R2Score #as r2_score
 from sklearn.metrics import r2_score
 from sklearn.metrics import mean_squared_error
 import math
@@ -242,19 +244,19 @@ class DataCollator:
             return
 
 training_data = DatasetReader(
-      config["training"]["training_h5_file"], 
-      block_size=config["training"]["n_ctx"], 
-      stride=config["training"]["stride"],
-      ndata=config["training"]["ndata"], 
-      )
+    config["training"]["training_h5_file"], 
+    block_size=config["training"]["n_ctx"], 
+    stride=config["training"]["stride"],
+    ndata=config["training"]["ndata"], 
+    )
 
 validating_data = DatasetReader(
-      config["validating"]["validating_h5_file"], 
-      block_size=config["validating"]["block_size"], 
-      stride=config["validating"]["stride"],
-      ndata=config["validating"]["ndata"], 
-      eval = True,
-      )
+    config["validating"]["validating_h5_file"], 
+    block_size=config["validating"]["block_size"], 
+    stride=config["validating"]["stride"],
+    ndata=config["validating"]["ndata"], 
+    eval = True,
+    )
 
 training_loader = DataLoader(
     training_data,
@@ -1236,7 +1238,7 @@ class EarlyStopping:
             
         if val_loss > self.mse_threshold:
             self.counter = 0
-             
+            
         logger.info('Counter value {}'.format(self.counter))
         logger.info('prev_epoch {}'.format(self.prev_epoch))
         logger.info('epoch {}'.format(epoch))
@@ -1256,46 +1258,6 @@ optimizer = torch.optim.Adam(model.parameters(), lr=config["training"]["learning
 scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=config["training"]["learning_rate"], max_lr=config["training"]["max_lr"],step_size_up=5,mode="exp_range",gamma=0.85, cycle_momentum=False)
 early_stopping = EarlyStopping(mse_threshold=config["training"]["MSE_threshold"], verbose=True, path=config["model"]["path"] + "/model/TransformerGPT.pt")
 
-# =============================================================================
-# #plotting learning rate
-# import torch
-# import matplotlib.pyplot as plt
-# 
-# for i0 in range(100,101,1):
-#     for j in range(1,3,1):
-#         optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
-#         scheduler  = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optimizer, T_0=i0, T_mult=j)
-#  
-#         lrs = []
-# 
-#         for i in range(100):
-#             scheduler.step()
-#             lrs.append(
-#                  optimizer.param_groups[0]["lr"]
-#              )
-#         plt.figure(figsize=(10,5))
-#         plt.plot(lrs,'o-')
-# 
-# 
-#         #os.chdir(config["model"]["path"])
-#         plt.savefig('learning_rate_t0_%i_tmult_%i.png' %(i0, j) )
-#         
-# optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
-# scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=0.0000001, max_lr=0.002,step_size_up=5,mode="exp_range",gamma=0.85, cycle_momentum=False)
-# lrs = []
-# 
-# plt.figure(figsize=(10,5))
-# for i in range(100):
-#     optimizer.step()
-#     lrs.append(optimizer.param_groups[0]["lr"])
-# #     print("Factor = ",i," , Learning Rate = ",optimizer.param_groups[0]["lr"])
-#     scheduler.step()
-# 
-# plt.plot(lrs)
-# 
-# plt.savefig('learning_rate CyclicLR.png')
-# =============================================================================
-
 trainer = Trainer(
         model, 
         (optimizer, scheduler), 
@@ -1314,12 +1276,12 @@ print("Elapsed Time = %f hr" % (((start.elapsed_time(end)) / 3600000)))
 #Testing
 
 testing_data = DatasetReader(
-      config["testing"]["testing_h5_file"], 
-      block_size=config["testing"]["block_size"], 
-      stride=config["testing"]["stride"],
-      ndata=config["testing"]["ndata"], 
-      eval = True,
-      )
+    config["testing"]["testing_h5_file"], 
+    block_size=config["testing"]["block_size"], 
+    stride=config["testing"]["stride"],
+    ndata=config["testing"]["ndata"], 
+    eval = True,
+    )
 
 testing_loader = DataLoader(
     testing_data,
@@ -1357,9 +1319,11 @@ inputs0=inputs0[:,:,:3]
 output2 = torch.flatten(output1)
 inputs2 = torch.flatten(inputs0)
 
-R2=r2_score(output2.cpu().detach(), inputs2.cpu().detach())
+R2=r2_score(output2.cpu().detach(), inputs2.cpu().detach()) # for sklearn.metrics
+R2=R2Score(output2.cpu().detach(), inputs2.cpu().detach()) # for torchmetrics
 r2.append(R2)
-MSE=mean_squared_error(output2.cpu().detach(), inputs2.cpu().detach(), squared=True)
+MSE=mean_squared_error(output2.cpu().detach(), inputs2.cpu().detach(), squared=True) # for sklearn.metrics
+MSE=MeanSquaredError(output2.cpu().detach(), inputs2.cpu().detach(), squared=True) # for torchmetrics
 mse.append(MSE)
 print("r2_score: %.5f" % R2)
 print("MSE: %.5f" % MSE)
