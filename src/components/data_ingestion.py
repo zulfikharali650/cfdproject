@@ -188,6 +188,9 @@ class DatasetReader(Dataset):
         with h5py.File(file_path, "r") as f:
             self.load_data(f, **kwargs)  
 
+    # TODO: modify the h5_file to include Boiler Headers Mesh, then modify load_data to apply the mesh as the embedding vectors. 
+        # For each time step, the embedding vector is fixed, it will be used as a constraint to the trajectories. 
+        # We can use the koopman technique to calculate the embedding vector using all timestep results.  
     def load_data(self, h5_file: h5py.File) -> None:
 
         # Iterate through stored time-series
