@@ -100,8 +100,8 @@ class Conv1D(nn.Module):
 config = {
     "model": {
         "n_embd": 1568,
-        "n_layer": AAAAA,
-        "n_head": BBBBB,
+        "n_layer": 4,
+        "n_head": 4,
         "activation_function": gelu,
         "dropout": 0.0,
         "seed": 12345,
@@ -110,7 +110,7 @@ config = {
     },
     "training": {
         "device": "cuda", # "cuda" or "cpu"
-        "batch_size": FFFFF,
+        "batch_size": 64,
         "training_h5_file": "/bigdata/wonglab/syang159/CFD2/Kfold_data/training_data_HHHHH.hdf5",
         "n_ctx": CCCCC,
         "resid_pdrop": 0.0,
@@ -118,7 +118,7 @@ config = {
         "attn_pdrop": 0.0,
         "layer_norm_epsilon": 1e-05,
         "initializer_range": 0.01,
-        "stride": DDDDD,
+        "stride": 4,
         "ndata": 2500,  #2500
         "num_epoch": 100, #100
         "learning_rate": LLLLL,
@@ -139,7 +139,7 @@ config = {
     },
     "validating": {
         "validating_h5_file": "/bigdata/wonglab/syang159/CFD2/Kfold_data/validating_data_HHHHH.hdf5",
-        "batch_size": FFFFF,
+        "batch_size": 64,
         "block_size": 50,
         "stride": 3000,
         "ndata": 312,  #312
@@ -147,7 +147,7 @@ config = {
     },
     "testing": {
         "testing_h5_file": "/bigdata/wonglab/syang159/CFD2/Kfold_data/testing_data.hdf5",
-        "batch_size": FFFFF,
+        "batch_size": 64,
         "block_size": 50,
         "stride": 3000,
         "ndata": 313  #313
@@ -293,7 +293,6 @@ validating_loader = DataLoader(
 
 
 #Testing
-
 testing_data = DatasetReader(
     config["testing"]["testing_h5_file"], 
     block_size=config["testing"]["block_size"], 

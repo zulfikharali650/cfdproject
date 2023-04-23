@@ -3,6 +3,7 @@ import sys
 import h5py
 import numpy as np
 import torch
+from dataclasses import dataclass
 # import logging
 import random
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
@@ -14,6 +15,10 @@ import math
 from src.exception import CustomException
 from src.logger import logging
 
+
+@dataclass
+class ModelTrainerConfig:
+    trained_model_file_path = os.path.join('artifacts', 'model.pkl')
 
 #Define model
 class MLP(nn.Module):
@@ -777,6 +782,8 @@ class Trainer:
         self.validating_loader = validating_loader
         self.optimizers = optimizers
         set_seed(config["model"]["seed"])
+        
+        self.model_trainer_config = ModelTrainerConfig()
 
     def train(self) -> None:
         """Trains the transformer model
@@ -1051,4 +1058,9 @@ start.record()
 trainer.train()
 torch.cuda.synchronize()
 end.record()
-print("Elapsed Time = %f hr" % (((start.elapsed_time(end)) / 3600000)))  
+print("Elapsed Time = %f hr" % (((start.elapsed_time(end)) / 3600000))) 
+
+save_object(
+        file_path=trainer.model_trainer_config.trained_model_file_path,
+        obj=trainer
+    )
