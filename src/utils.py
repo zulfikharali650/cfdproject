@@ -12,6 +12,7 @@ import torch
 from src.exception import CustomException
 from src.logger import logging as logger
 
+
 def save_object(file_path, obj):
     try:
         dir_path = os.path.dirname(file_path)

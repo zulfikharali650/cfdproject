@@ -173,7 +173,7 @@ class DatasetReader(Dataset):
         self.states = []
         with h5py.File(file_path, "r") as f:
             self.load_data(f, **kwargs)  
-   
+
     def load_data(self, h5_file: h5py.File) -> None:
 
         # Iterate through stored time-series
@@ -189,13 +189,13 @@ class DatasetReader(Dataset):
                 p=p.to(config["training"]["device"])
                 data_series1 = torch.cat([data_series, p.unsqueeze(-1) * torch.ones_like(data_series[:,:1])], dim=1)
                 data_series1 = data_series1.view(data_series1.size(0),data_series1.size(1)*data_series1.size(2))
-                       
+                    
                 # Stride over time-series
                 for i in range(0, data_series1.size(0) - self.block_size + 1, self.stride):
                     
                     data_series0 = data_series1[i: i + self.block_size]  # .repeat(1, 4)
                     self.examples.append(data_series0)
-     
+    
                     if self.eval:
                         self.states.append(data_series[i: i+ self.block_size].cpu())
         
@@ -443,7 +443,7 @@ class MaskedAttention(nn.Module):
             x (Tensor): [batch, seq_length, nx] Input feature.
             layer_past (Tensor, optional): [2, batch, n_head, seq_length, nx] Precomputed self-attention vectors. Defaults to None.
             attention_mask (Tensor, optional): Optional defined attention mask. Applied before soft mask.
-                 Defaults to None.
+            Defaults to None.
             head_mask (Tensor, optional): Optional attention value mask. Applied after softmax Defaults to None.
             use_cache (bool, optional): Return calculated key values or faster generation. Defaults to False.
             output_attentions (bool, optional): Return attention matrix. Defaults to False.
