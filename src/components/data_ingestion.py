@@ -36,6 +36,7 @@ class DataIngestion:
 if __name__=="__main__":
     obj = DataIngestion()
     train_data, test_data = obj.initiate_data_ingestion()
+    configs = os.path.join('.', 'configs.json')
 
 
 
@@ -96,63 +97,63 @@ class Conv1D(nn.Module):
         x = x.view(*size_out)
         return x
     
-#Generalization 
-config = {
-    "model": {
-        "n_embd": 1568,
-        "n_layer": 4,
-        "n_head": 4,
-        "activation_function": gelu,
-        "dropout": 0.0,
-        "seed": 12345,
-        "path": "/bigdata/wonglab/syang159/CFD2/pytorch_particle_random_order/" + "IIIII",
-        "path_result": "/bigdata/wonglab/syang159/CFD2/pytorch_particle_random_order/JJJJJ/Result"
-    },
-    "training": {
-        "device": "cuda", # "cuda" or "cpu"
-        "batch_size": 64,
-        "training_h5_file": "/bigdata/wonglab/syang159/CFD2/Kfold_data/training_data_HHHHH.hdf5",
-        "n_ctx": CCCCC,
-        "resid_pdrop": 0.0,
-        "embd_pdrop": 0.0,
-        "attn_pdrop": 0.0,
-        "layer_norm_epsilon": 1e-05,
-        "initializer_range": 0.01,
-        "stride": 4,
-        "ndata": 2500,  #2500
-        "num_epoch": 100, #100
-        "learning_rate": LLLLL,
-        "max_lr": MMMMM,
-        #"T_0_for_cosine_annealing": EEEEE,
-        #"T_mult_for_cosine_annealing": GGGGG,
-        "scheduler_step_size": 100,
-        "output_hidden_state": False,
-        "output_attention": False,
-        "use_cache": True,
-        "max_length": 50,
-        "min_length": 0,
-        "gradient_accumulation_steps": 1,
-        "max_grad_norm": 0.01,
-        "Job_number": KKKKK,
-        "MSE_threshold": 0.0065,
-        "es_counter": 3
-    },
-    "validating": {
-        "validating_h5_file": "/bigdata/wonglab/syang159/CFD2/Kfold_data/validating_data_HHHHH.hdf5",
-        "batch_size": 64,
-        "block_size": 50,
-        "stride": 3000,
-        "ndata": 312,  #312
-        "val_steps":1
-    },
-    "testing": {
-        "testing_h5_file": "/bigdata/wonglab/syang159/CFD2/Kfold_data/testing_data.hdf5",
-        "batch_size": 64,
-        "block_size": 50,
-        "stride": 3000,
-        "ndata": 313  #313
-    }
-}
+# #Generalization 
+# config = {
+#     "model": {
+#         "n_embd": 1568,
+#         "n_layer": 4,
+#         "n_head": 4,
+#         "activation_function": gelu,
+#         "dropout": 0.0,
+#         "seed": 12345,
+#         "path": "/bigdata/wonglab/syang159/CFD2/pytorch_particle_random_order/" + "IIIII",
+#         "path_result": "/bigdata/wonglab/syang159/CFD2/pytorch_particle_random_order/JJJJJ/Result"
+#     },
+#     "training": {
+#         "device": "cuda", # "cuda" or "cpu"
+#         "batch_size": 64,
+#         "training_h5_file": "/bigdata/wonglab/syang159/CFD2/Kfold_data/training_data_HHHHH.hdf5",
+#         "n_ctx": CCCCC,
+#         "resid_pdrop": 0.0,
+#         "embd_pdrop": 0.0,
+#         "attn_pdrop": 0.0,
+#         "layer_norm_epsilon": 1e-05,
+#         "initializer_range": 0.01,
+#         "stride": 4,
+#         "ndata": 2500,  #2500
+#         "num_epoch": 100, #100
+#         "learning_rate": LLLLL,
+#         "max_lr": MMMMM,
+#         #"T_0_for_cosine_annealing": EEEEE,
+#         #"T_mult_for_cosine_annealing": GGGGG,
+#         "scheduler_step_size": 100,
+#         "output_hidden_state": False,
+#         "output_attention": False,
+#         "use_cache": True,
+#         "max_length": 50,
+#         "min_length": 0,
+#         "gradient_accumulation_steps": 1,
+#         "max_grad_norm": 0.01,
+#         "Job_number": KKKKK,
+#         "MSE_threshold": 0.0065,
+#         "es_counter": 3
+#     },
+#     "validating": {
+#         "validating_h5_file": "/bigdata/wonglab/syang159/CFD2/Kfold_data/validating_data_HHHHH.hdf5",
+#         "batch_size": 64,
+#         "block_size": 50,
+#         "stride": 3000,
+#         "ndata": 312,  #312
+#         "val_steps":1
+#     },
+#     "testing": {
+#         "testing_h5_file": "/bigdata/wonglab/syang159/CFD2/Kfold_data/testing_data.hdf5",
+#         "batch_size": 64,
+#         "block_size": 50,
+#         "stride": 3000,
+#         "ndata": 313  #313
+#     }
+# }
 
 def seed_torch(seed=config['model']['seed']):
     random.seed(seed)
