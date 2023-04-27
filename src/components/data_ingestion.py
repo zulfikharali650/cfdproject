@@ -10,6 +10,7 @@ from torch.utils.data.dataset import Dataset
 import torch.nn as nn
 from typing import Any, Tuple, Dict, List, Union
 import math
+import json
 
 from src.exception import CustomException
 from src.logger import logging
@@ -36,7 +37,7 @@ class DataIngestion:
 if __name__=="__main__":
     obj = DataIngestion()
     train_data, test_data = obj.initiate_data_ingestion()
-    configs = os.path.join('.', 'configs.json')
+    configs = json.loads(os.path.join('.', 'configs.json'))
 
 
 
